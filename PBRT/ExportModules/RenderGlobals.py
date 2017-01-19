@@ -146,18 +146,18 @@ class RenderGlobals(ExportModule):
         """
         
         renderer        = cmds.getAttr( 'pbrt_settings.renderer', asString = True ).lower()
-        self.addToOutput( 'Renderer "%s"' % renderer )
-        if renderer== 'sampler':
-            self.outputBool('visualizeobjectids')
-        elif renderer== 'metropolis':
-            self.outputFloat('largestepprobability')
-            self.outputInt('samplesperpixel')
-            self.outputInt('bootstrapsamples')
-            self.outputInt('directsamples')
-            self.outputBool('dodirectseparately')
-            self.outputInt('maxconsecutiverejects')
-            self.outputInt('maxdepth')
-            self.outputBool('bidirectional')
+        #self.addToOutput( 'Renderer "%s"' % renderer )
+        #if renderer== 'sampler':
+        #    self.outputBool('visualizeobjectids')
+        #elif renderer== 'metropolis':
+        #    self.outputFloat('largestepprobability')
+        #    self.outputInt('samplesperpixel')
+        #    self.outputInt('bootstrapsamples')
+        #    self.outputInt('directsamples')
+        #    self.outputBool('dodirectseparately')
+        #    self.outputInt('maxconsecutiverejects')
+        #    self.outputInt('maxdepth')
+        #    self.outputBool('bidirectional')
         
         self.addToOutput( '' )      
         
@@ -167,7 +167,7 @@ class RenderGlobals(ExportModule):
         """
         
         surface_integrator        = cmds.getAttr( 'pbrt_settings.surface_integrator', asString = True ).lower()
-        self.addToOutput( 'SurfaceIntegrator "%s"' % surface_integrator )
+        self.addToOutput( 'Integrator "%s"' % surface_integrator )
         if surface_integrator== 'irradiancecache':
             self.outputFloat('minweight','integrator_')
             self.outputFloat('minpixelspacing','integrator_')
@@ -207,5 +207,3 @@ class RenderGlobals(ExportModule):
             self.outputInt('maxprims','accelerator_')
             self.outputInt('maxdepth','accelerator_')
         self.addToOutput( '' )
-            
-            

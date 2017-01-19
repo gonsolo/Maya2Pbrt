@@ -50,7 +50,7 @@ def initializePlugin(mobject):
     Start the plugin by registering all commands and nodes etc that this plugin provides
     """
     
-    mplugin = OpenMayaMPx.MFnPlugin(mobject, "Vlad Volodymyr Kazantsev", "0.1", "Any")
+    mplugin = OpenMayaMPx.MFnPlugin(mobject, "Vlad Volodymyr Kazantsev and Gonsolo", "0.2", "Any")
     
     # there are multiple reload() calls in various places in code
     # Those are used to load updated code without restarting Maya
