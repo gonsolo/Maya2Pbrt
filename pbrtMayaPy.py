@@ -31,6 +31,8 @@ import pkgutil
 import PBRT.Nodes
 
 
+OpenMaya.MGlobal.displayInfo( "Gonzo" )
+
 # ------------------------------------------------------------------------------
 
 # Global list of commands that we want to register with Maya.

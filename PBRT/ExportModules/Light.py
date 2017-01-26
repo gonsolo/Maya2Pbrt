@@ -128,6 +128,9 @@ class SpotLight(Light):
         self.dagPath = dagPath
         self.light = OpenMaya.MFnSpotLight( dagPath )
         
+    def rad2degree(self, rad):
+        return rad * 180 / math.pi
+
     def getOutput(self):
         """
         Return PBRT LightSource "spot" from the given spotlight node.
@@ -147,11 +150,11 @@ class SpotLight(Light):
         self.addToOutput( '\t\t"color I" [%f %f %f]' % (colorR, colorG, colorB) )
         self.addToOutput( '\t\t"point from" [0 0 0]')
         self.addToOutput( '\t\t"point to" [0 0 -1]' )
-        self.addToOutput( '\t\t"float coneangle" [%f]' % ( self.light.coneAngle()*180/math.pi ) )
-        self.addToOutput( '\t\t"float conedeltaangle" [%f]' % ( self.light.dropOff()*180/math.pi ) )
+        self.addToOutput( '\t\t"float coneangle" [%f]' % ( self.rad2degree(self.light.coneAngle()) / 2 ))
+        self.addToOutput( '\t\t"float conedeltaangle" [%f]' % ( self.rad2degree(self.light.dropOff()) / 2 ))
         self.addToOutput( 'TransformEnd' )
         self.addToOutput( '' )
-        
+
         self.fileHandle.flush()
 
 
