@@ -48,6 +48,9 @@ class Light(ExportModule):
         elif nodeType == OpenMaya.MFn.kDirectionalLight:
             #this is a pointlight
             return DistantLight( fileHandle, dagPath )
+        elif nodeType == OpenMaya.MFn.kAreaLight:
+            OpenMaya.MGlobal.displayInfo( "Found area light" )
+            return AreaLight( fileHandle, dagPath )
 
         else:
             OpenMaya.MGlobal.displayWarning("Light type %i not supported" % nodeType)
@@ -69,7 +72,41 @@ class Light(ExportModule):
         Nothing to do here, child classes output light type specific syntax.
         """
         pass
-    
+
+
+class AreaLight(Light):
+    """
+    Area light type.
+    """
+
+    light = OpenMaya.MFnAreaLight()
+
+    def __init__( self, fileHandle, dagPath ):
+
+        self.fileHandle = fileHandle
+        self.dagPath = dagPath
+        self.light = OpenMaya.MFnAreaLight( dagPath )
+
+    def getOutput(self):
+
+        color = self.light.color()
+        intensity = self.light.intensity()
+
+        colorR = self.rgcAndClamp( color.r * intensity )
+        colorG = self.rgcAndClamp( color.g * intensity )
+        colorB = self.rgcAndClamp( color.b * intensity )
+ 
+        self.addToOutput( '# Area Light ' + self.dagPath.fullPathName() )
+        self.addToOutput( 'TransformBegin' )
+        self.addToOutput( self.translationMatrix( self.dagPath ) )
+        self.addToOutput( '\tAreaLightSource "diffuse"' )
+        self.addToOutput( '\t\t"color L" [%f %f %f]' % (colorR, colorG, colorB) )
+        self.addToOutput( '\t\tShape "sphere" "float radius" [.25]' )
+        self.addToOutput( 'TransformEnd' )
+        self.addToOutput( '' )
+ 
+        self.fileHandle.flush()
+
 
 class DistantLight(Light):
     """
@@ -86,12 +123,12 @@ class DistantLight(Light):
         self.fileHandle = fileHandle
         self.dagPath = dagPath
         self.light = OpenMaya.MFnDirectionalLight( dagPath )
-        
+
     def getOutput(self):
         """
         Return LightSource "distant" from the given directional node.
         """
-        
+
         color = self.light.color()
         intensity = self.light.intensity()
         
