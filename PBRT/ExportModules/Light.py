@@ -97,12 +97,12 @@ class AreaLight(Light):
         colorB = self.rgcAndClamp( color.b * intensity )
  
         self.addToOutput( '# Area Light ' + self.dagPath.fullPathName() )
-        self.addToOutput( 'TransformBegin' )
+        self.addToOutput( 'AttributeBegin' )
         self.addToOutput( self.translationMatrix( self.dagPath ) )
 
         self.addToOutput( '\tAreaLightSource "diffuse" "integer samples" 1 "rgb L" [%f %f %f]' % (colorR, colorG, colorB) )
         self.addToOutput( '\t\tShape "sphere" "float radius" [1.25]' )
-        self.addToOutput( 'TransformEnd' )
+        self.addToOutput( 'AttributeEnd' )
         self.addToOutput( '' )
  
         self.fileHandle.flush()
