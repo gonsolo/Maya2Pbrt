@@ -415,9 +415,11 @@ class MeshOpt(ShadedObject):
             vLen = len(self.vertNormUVList)
             pSpeed = vLen/procDuration
             wSpeed = vLen/writeDuration
-            print "%i verts processed in %f seconds: %f verts/sec" % (vLen, procDuration, pSpeed)
-            print " -> written in %f seconds: %f verts/sec" % (writeDuration, wSpeed)
-            
+            #print "%i verts processed in %f seconds: %f verts/sec" % (vLen, procDuration, pSpeed)
+            print('{:i} verts processed in {:f} seconds: {:f} verts/sec'.format(vLen, procDuration, pSpeed))
+            #print " -> written in %f seconds: %f verts/sec" % (writeDuration, wSpeed)
+            print(' -> written in {:f} seconds: {:f} verts/sec'.format(writeDuration, wSpeed))          
+
             sf = open("e:\meshopt_stats.csv", "a")
             sf.write ( ( '%i,%f,%f' % (vLen, pSpeed, wSpeed) ) + os.linesep )
             sf.close()
