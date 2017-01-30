@@ -100,8 +100,15 @@ class AreaLight(Light):
         self.addToOutput( 'AttributeBegin' )
         self.addToOutput( self.translationMatrix( self.dagPath ) )
 
-        self.addToOutput( '\tAreaLightSource "diffuse" "integer samples" 1 "rgb L" [%f %f %f]' % (colorR, colorG, colorB) )
-        self.addToOutput( '\t\tShape "sphere" "float radius" [1.25]' )
+        samples = self.light.numShadowSamples()
+
+        self.addToOutput( '\tAreaLightSource "diffuse" "integer samples" %i "rgb L" [%f %f %f]' % (samples, colorR, colorG, colorB) )
+
+        self.addToOutput( '\tShape "trianglemesh"')
+        self.addToOutput( '\t\t"point P"         [ -1 -1   0   1 -1   0      1 1  0   -1 1  0 ]')
+        self.addToOutput( '\t\t"normal N"        [  0  0  -1   0  0  -1      0 0 -1    0 0 -1 ]')
+        self.addToOutput(' \t\t"integer indices" [  0  1   2   0  2   3 ]')
+
         self.addToOutput( 'AttributeEnd' )
         self.addToOutput( '' )
  
