@@ -39,7 +39,9 @@ class Light(ExportModule):
         
         nodeType = dagPath.node().apiType()
 
-        OpenMaya.MGlobal.displayInfo( "LightFactory: nodeType: " + str(nodeType) )
+	#print("gonzo: LightFactory: nodeType: " + str(nodeType))
+
+        #OpenMaya.MGlobal.displayInfo( "LightFactory: nodeType: " + str(nodeType) )
         
         if nodeType == OpenMaya.MFn.kSpotLight:
             #this is a spotlight
@@ -53,10 +55,18 @@ class Light(ExportModule):
         elif nodeType == OpenMaya.MFn.kAreaLight:
             OpenMaya.MGlobal.displayInfo( "Found area light" )
             return AreaLight( fileHandle, dagPath )
+	elif nodeType == OpenMaya.MFn.kDagNode:
+	    print("gonzo: Found dag node, possibly Arnold area light")
 
         else:
             OpenMaya.MGlobal.displayWarning("Light type %i not supported" % nodeType)
             return False
+
+
+    @staticmethod
+    def LightFactoryArnold( fileHandle, dagPath ):
+    	print("gonzo: LightFactoryArnold")
+	return ArnoldAreaLight( fileHandle, dagPath )
     
     @staticmethod
     def defaultLighting():
@@ -109,6 +119,13 @@ class AreaLight(Light):
  
         self.fileHandle.flush()
 
+class ArnoldAreaLight(Light):
+
+    light = None
+
+    def __init__( self, fileHandle, dagPath ):
+
+    	pass
 
 class DistantLight(Light):
     """

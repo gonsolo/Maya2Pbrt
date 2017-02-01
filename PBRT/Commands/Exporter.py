@@ -182,11 +182,18 @@ class Exporter:
         
         # loop though lights
         if cmds.getAttr( 'pbrt_settings.scene_export_lights' ) == 1:
+
+	    print("gonzo: loop through lights")
+
             exportedLights = self.exportType( OpenMaya.MFn.kLight, PBRTLight.Light.LightFactory, "Light" ) 
+
+            exportedLights += self.exportType( 107, PBRTLight.Light.LightFactoryArnold, "Light")
+
             if 0==exportedLights \
             and cmds.getAttr( 'pbrt_settings.scene_export_defaultLighting' ) == 1 \
             and areaLightsWereWritten==0:
                 self.sceneFileHandle.write( PBRTLight.Light.defaultLighting())
+
         
         self.exportType( OpenMaya.MFn.kLocator, PBRTLocator.Locator.Factory, "Locator" )
 
@@ -251,21 +258,15 @@ class Exporter:
             
             expModule = False
             if isDag:
-#	    	self.dprint("gonzo: isDag")
                 itDn.getPath(self.tempDagPath)
                 theNode = OpenMaya.MFnDagNode(self.tempDagPath)
                 nodeName = theNode.name()
-#	    	self.dprint("gonzo: nodeName: " + nodeName)
                 if self.isVisible(theNode):
                     expModule = objModule(theFileHandle, self.tempDagPath)
-#                    self.dprint("gonzo: isVisible")
-#		else
-#                    self.dprint("gonzo: not isVisible")
+		    self.dprint("gonzo: " + nodeName + " " + str(theNode.type()) + " " + str(expModule))
             else:
-#	    	self.dprint("gonzo: not isDag")
                 theNode = OpenMaya.MFnDependencyNode( itDn.thisNode() )
                 nodeName = theNode.name()
-#	    	self.dprint("gonzo: nodeName: " + nodeName)
                 expModule = objModule(theFileHandle, theNode)
             if expModule !=False:
                 expOut = expModule.loadModule()
