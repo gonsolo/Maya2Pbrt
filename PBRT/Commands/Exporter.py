@@ -251,14 +251,21 @@ class Exporter:
             
             expModule = False
             if isDag:
+#	    	self.dprint("gonzo: isDag")
                 itDn.getPath(self.tempDagPath)
                 theNode = OpenMaya.MFnDagNode(self.tempDagPath)
                 nodeName = theNode.name()
+#	    	self.dprint("gonzo: nodeName: " + nodeName)
                 if self.isVisible(theNode):
                     expModule = objModule(theFileHandle, self.tempDagPath)
+#                    self.dprint("gonzo: isVisible")
+#		else
+#                    self.dprint("gonzo: not isVisible")
             else:
+#	    	self.dprint("gonzo: not isDag")
                 theNode = OpenMaya.MFnDependencyNode( itDn.thisNode() )
                 nodeName = theNode.name()
+#	    	self.dprint("gonzo: nodeName: " + nodeName)
                 expModule = objModule(theFileHandle, theNode)
             if expModule !=False:
                 expOut = expModule.loadModule()

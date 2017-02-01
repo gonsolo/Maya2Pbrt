@@ -38,6 +38,8 @@ class Light(ExportModule):
         """
         
         nodeType = dagPath.node().apiType()
+
+        OpenMaya.MGlobal.displayInfo( "LightFactory: nodeType: " + str(nodeType) )
         
         if nodeType == OpenMaya.MFn.kSpotLight:
             #this is a spotlight

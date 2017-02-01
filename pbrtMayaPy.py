@@ -40,6 +40,8 @@ pbrtCommands = [
     pbrtbatch
 ]
 
+mainMenu = mainMenu()
+
 # We build the list of nodes by scanning the Nodes directory
 nodesPath = os.path.dirname(PBRT.Nodes.__file__)
 pbrtNodes = [name for _, name, _ in pkgutil.iter_modules([nodesPath])]
@@ -101,7 +103,7 @@ def initializePlugin(mobject):
 
         if OpenMaya.MGlobal.mayaState() == OpenMaya.MGlobal.kInteractive:
             # Create Top menu
-            mainMenu().make()
+            mainMenu.make()
             
         
         OpenMaya.MGlobal.displayInfo('PBRTMayaPy: Plugin loaded')
@@ -125,6 +127,8 @@ def uninitializePlugin(mobject):
         # deregister nodes
         for node in pbrtRegisteredNode:
             mplugin.deregisterNode( node.nodeId() )
+
+        mainMenu.delete()
 
         # OpenMaya.MGlobal.displayInfo("Plugin Removed OK.")
     except:
