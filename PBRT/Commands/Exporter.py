@@ -183,7 +183,7 @@ class Exporter:
         # loop though lights
         if cmds.getAttr( 'pbrt_settings.scene_export_lights' ) == 1:
 
-	    print("gonzo: loop through lights")
+	    #print("gonzo: loop through lights")
 
             exportedLights = self.exportType( OpenMaya.MFn.kLight, PBRTLight.Light.LightFactory, "Light" ) 
 
@@ -263,7 +263,7 @@ class Exporter:
                 nodeName = theNode.name()
                 if self.isVisible(theNode):
                     expModule = objModule(theFileHandle, self.tempDagPath)
-		    self.dprint("gonzo: " + nodeName + " " + str(theNode.type()) + " " + str(expModule))
+		    #self.dprint("gonzo: " + nodeName + " " + str(theNode.type()) + " " + str(expModule))
             else:
                 theNode = OpenMaya.MFnDependencyNode( itDn.thisNode() )
                 nodeName = theNode.name()
