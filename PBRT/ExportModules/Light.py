@@ -42,14 +42,13 @@ class Light(ExportModule):
         #print("gonzo: LightFactory: nodeType: " + str(nodeType))
         #OpenMaya.MGlobal.displayInfo( "LightFactory: nodeType: " + str(nodeType) )
         
+        OpenMaya.MGlobal.displayInfo('Node tyPpe: {:d}.format(nodeType)')
+
         if nodeType == OpenMaya.MFn.kSpotLight:
-            #this is a spotlight
             return SpotLight( fileHandle, dagPath )
         elif nodeType == OpenMaya.MFn.kPointLight:
-            #this is a pointlight
             return PointLight( fileHandle, dagPath )
         elif nodeType == OpenMaya.MFn.kDirectionalLight:
-            #this is a pointlight
             return DistantLight( fileHandle, dagPath )
         elif nodeType == OpenMaya.MFn.kAreaLight:
             OpenMaya.MGlobal.displayInfo( "Found area light" )
