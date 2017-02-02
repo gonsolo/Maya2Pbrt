@@ -12,6 +12,7 @@
 #
 # ------------------------------------------------------------------------------
 
+from maya import OpenMaya
 from maya import cmds
 from maya import mel
 
@@ -22,6 +23,7 @@ class mMenu:
     """
     
     mName = str()
+
     def __init__(self, label, helpMenu = False, parent = False, tearOff = False ):
         """
         Start a new menu with the gIven options.
@@ -56,8 +58,14 @@ class mMenu:
         
         cmds.setParent( '..', menu = True)
 
+    def delete(self):
+
+	cmds.deleteUI( self.mName )	
 
 class mainMenu:
+
+    pbrtMenu = None
+
     def exportAndRender(self,*args):
         mel.eval('pbrt_export()')
 
@@ -82,15 +90,21 @@ class mainMenu:
         
         gMainWindow = mel.eval('$tmpVar=$gMainWindow')
         
-        pbrtMenu = mMenu(label = 'PBRT', parent = gMainWindow, tearOff = True )
-        pbrtMenu.addItem( label = "Export and Render" , command =self.exportAndRender  )
-        pbrtMenu.addItem( label = "Render Globals" , command = self.makeRenderSettings )
-        pbrtMenu.addItem( label = "Create Text Object" , command = self.createNewTextObject )
+        self.pbrtMenu = mMenu(label = 'PBRT', parent = gMainWindow, tearOff = True )
+        self.pbrtMenu.addItem( label = "Export and Render" , command =self.exportAndRender  )
+        self.pbrtMenu.addItem( label = "Render Globals" , command = self.makeRenderSettings )
+        self.pbrtMenu.addItem( label = "Create Text Object" , command = self.createNewTextObject )
 
-        pbrtMenu.end()
+        self.pbrtMenu.end()
         
         renderMS = mel.eval('findMenuSetFromLabel("Rendering")')
         cmds.menuSet( currentMenuSet = renderMS )
         menuIndex  = cmds.menuSet( query = True, numberOfMenus = True)
-        cmds.menuSet( insertMenu = (pbrtMenu.getName(), menuIndex) )
-        pbrtMenu.end()
+
+        cmds.menuSet( insertMenu = (self.pbrtMenu.getName(), menuIndex) )
+        self.pbrtMenu.end()
+
+    def delete(self):
+
+	self.pbrtMenu.delete()
+
