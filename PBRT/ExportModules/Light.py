@@ -62,11 +62,11 @@ class Light(ExportModule):
     @staticmethod
     def LightFactoryArnold( fileHandle, dagPath ):
 
-	node = OpenMaya.MFnDagNode(dagPath)
-        #print("gonzo: LightFactoryArnold: " + node.name())
+        node = OpenMaya.MFnDagNode(dagPath)
         if(node.name() == "aiAreaLight1"):
+	    print("Returning Arnold")
             return ArnoldAreaLight( fileHandle, dagPath )
-	else:
+        else:
             return False
 
     @staticmethod
@@ -133,7 +133,32 @@ class ArnoldAreaLight(Light):
 
     def __init__( self, fileHandle, dagPath ):
 
-    	pass
+	print("Arnold init")
+	self.fileHandle = fileHandle
+	self.dagPath = dagPath
+	self.light = None
+
+    def getOutput(self):
+
+	print("Arnold getOutput")
+        self.addToOutput( '# Arnold Area Light ' + self.dagPath.fullPathName() )
+        self.addToOutput( 'AttributeBegin' )
+        self.addToOutput( self.translationMatrix( self.dagPath ) )
+
+	colorR = 20
+	colorG = 20
+	colorB = 20
+        samples = 1
+
+        self.addToOutput( '\tAreaLightSource "diffuse" "integer samples" %i "rgb L" [%f %f %f]' % (samples, colorR, colorG, colorB) )
+
+        self.addToOutput( '\tShape "cylinder"')
+
+        self.addToOutput( 'AttributeEnd' )
+        self.addToOutput( '' )
+ 
+        self.fileHandle.flush()
+
 
 class DistantLight(Light):
     """

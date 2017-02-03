@@ -187,7 +187,9 @@ class Exporter:
 
             exportedLights = self.exportType( OpenMaya.MFn.kLight, PBRTLight.Light.LightFactory, "Light" ) 
 
+            print("Exporting Arnold")
             exportedLights += self.exportType( 107, PBRTLight.Light.LightFactoryArnold, "Light")
+            print("Done")
 
             if 0==exportedLights \
             and cmds.getAttr( 'pbrt_settings.scene_export_defaultLighting' ) == 1 \
@@ -236,6 +238,8 @@ class Exporter:
         Shame we need a different iterator for materials, and some other objects.
         """
         
+        print("exportType")
+
         if theFileHandle == "_undefined":
             theFileHandle = self.sceneFileHandle
         self.log("Exporting " + logType + " objects...")
@@ -252,6 +256,7 @@ class Exporter:
         exported = 0
             
         while not itDn.isDone():
+
             #if self.mComputation.isInterruptRequested(): break
             if self.mProgress.isCancelled(): break
             nodeName = ''
