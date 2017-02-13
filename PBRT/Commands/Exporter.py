@@ -238,8 +238,6 @@ class Exporter:
         Shame we need a different iterator for materials, and some other objects.
         """
         
-        print("exportType")
-
         if theFileHandle == "_undefined":
             theFileHandle = self.sceneFileHandle
         self.log("Exporting " + logType + " objects...")

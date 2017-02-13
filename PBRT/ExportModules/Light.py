@@ -24,7 +24,6 @@ from maya import OpenMaya
 # reload(ExportModule)
 from ExportModule import ExportModule
 
-
 class Light(ExportModule):
     """
     Light ExportModule base class. This is primarily a factory for returning
@@ -67,6 +66,7 @@ class Light(ExportModule):
 	    print("Returning Arnold")
             return ArnoldAreaLight( fileHandle, dagPath )
         else:
+	    print("Found other node: " + node.name())
             return False
 
     @staticmethod
@@ -136,7 +136,7 @@ class ArnoldAreaLight(Light):
 	print("Arnold init")
 	self.fileHandle = fileHandle
 	self.dagPath = dagPath
-	self.light = None
+	#self.light = OpenMaya.MPxLocatorNode( dagPath )
 
     def getOutput(self):
 
@@ -145,9 +145,19 @@ class ArnoldAreaLight(Light):
         self.addToOutput( 'AttributeBegin' )
         self.addToOutput( self.translationMatrix( self.dagPath ) )
 
-	colorR = 20
-	colorG = 20
-	colorB = 20
+	#color = self.dagPath.color()
+	#intensity = self.dagPath.intensity()
+
+	colorR = 1
+	colorG = 1
+	colorB = 1
+	intensity = 20
+
+        #colorR = self.rgcAndClamp( color.r * intensity )
+        #colorG = self.rgcAndClamp( color.g * intensity )
+        #colorB = self.rgcAndClamp( color.b * intensity )
+
+
         samples = 1
 
         self.addToOutput( '\tAreaLightSource "diffuse" "integer samples" %i "rgb L" [%f %f %f]' % (samples, colorR, colorG, colorB) )
@@ -189,13 +199,13 @@ class DistantLight(Light):
         colorB = self.rgcAndClamp( color.b * intensity )
     
         self.addToOutput( '# Directional Light ' + self.dagPath.fullPathName() )
-        self.addToOutput( 'TransformBegin' )
+        self.addToOutput( 'AttributeBegin' )
         self.addToOutput( self.translationMatrix( self.dagPath ) )
         self.addToOutput( '\tLightSource "distant"' )
         self.addToOutput( '\t\t"color L" [%f %f %f]' % (colorR, colorG, colorB) )
         self.addToOutput( '\t\t"point from" [0 0 0]')
         self.addToOutput( '\t\t"point to" [0 0 -1]' )
-        self.addToOutput( 'TransformEnd' )
+        self.addToOutput( 'AttributeEnd' )
         self.addToOutput( '' )
         
         self.fileHandle.flush()
@@ -233,7 +243,7 @@ class SpotLight(Light):
         colorB = self.rgcAndClamp( color.b * intensity )
     
         self.addToOutput( '# Spot Light ' + self.dagPath.fullPathName() )
-        self.addToOutput( 'TransformBegin' )
+        self.addToOutput( 'AttributeBegin' )
         self.addToOutput( self.translationMatrix( self.dagPath ) )
         self.addToOutput( '\tLightSource "spot"' )
         self.addToOutput( '\t\t"color I" [%f %f %f]' % (colorR, colorG, colorB) )
@@ -241,7 +251,7 @@ class SpotLight(Light):
         self.addToOutput( '\t\t"point to" [0 0 -1]' )
         self.addToOutput( '\t\t"float coneangle" [%f]' % ( self.rad2degree(self.light.coneAngle()) / 2 ))
         self.addToOutput( '\t\t"float conedeltaangle" [%f]' % ( self.rad2degree(self.light.dropOff()) / 2 ))
-        self.addToOutput( 'TransformEnd' )
+        self.addToOutput( 'AttributeEnd' )
         self.addToOutput( '' )
 
         self.fileHandle.flush()
@@ -276,9 +286,9 @@ class PointLight(Light):
         colorB = self.rgcAndClamp( color.b * intensity )
         
         self.addToOutput( '# Point Light ' + self.dagPath.fullPathName() )
-        self.addToOutput( 'TransformBegin' )
+        self.addToOutput( 'AttributeBegin' )
         self.addToOutput( self.translationMatrix( self.dagPath ) )
         self.addToOutput( '\tLightSource "point"' )
         self.addToOutput( '\t\t"color I" [%f %f %f]' % (colorR, colorG, colorB) )
-        self.addToOutput( 'TransformEnd' )
+        self.addToOutput( 'AttributeEnd' )
         self.addToOutput( '' )
